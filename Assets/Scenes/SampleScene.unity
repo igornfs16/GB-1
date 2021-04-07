@@ -1307,6 +1307,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2140289681466221194, guid: e6a1d6a25050f7d499e6fb4cf786f9a5, type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 2912730872741125951, guid: e6a1d6a25050f7d499e6fb4cf786f9a5, type: 3}
       propertyPath: m_Name
       value: Robot
@@ -1355,10 +1359,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8735737137422982939, guid: e6a1d6a25050f7d499e6fb4cf786f9a5, type: 3}
-      propertyPath: _minePrefab
-      value: 
-      objectReference: {fileID: 453390418343759033, guid: 468a6c4a335dbbd41b8e7cd18a692d5f, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6a1d6a25050f7d499e6fb4cf786f9a5, type: 3}
 --- !u!1 &2023503474 stripped
