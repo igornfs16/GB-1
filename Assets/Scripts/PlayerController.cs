@@ -4,28 +4,32 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
-
+    
+    [SerializeField] private float _maxPlayerHealth = 1000;
     [SerializeField] private int _gunAmmo = 500;
-    private Transform _gunFirePossition;
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private float _gunFireSpeed = 0.1f;
-
-    [SerializeField] private int _mortarAmmo = 500;
-    private Transform _mortarFirePossition;
+    [SerializeField] private int _mortarAmmo = 100;
     [SerializeField] private GameObject _minePrefab;
     [SerializeField] private float _mortarFireSpeed = 0.5f;
-
-    private float _lastTime;
-
     [SerializeField] private float headMinY = -80f;
     [SerializeField] private float headMaxY = 80f;
     [SerializeField] private float _sensitivity = 1f;
+    [SerializeField] private float _speed = 1;
+    [SerializeField] private float _bulletSpeed = 300f;
+    [SerializeField] private float _mineSpeed = 100f;
+    [SerializeField] private float _maxMortarRange = 100f;
+    [SerializeField] private bool _haveMortar = false;
+
     private float rotationX;
     private float rotationY;
-
+    private float _playerHealth;
+    private Transform _gunFirePossition;
+    private Transform _mortarFirePossition;
+    private float _mortarFireDistance;
     private Vector3 _currentPos;
-    [SerializeField] private float _speed = 1;
+    private float _lastTime;
+    
 
    
 
@@ -35,6 +39,8 @@ public class PlayerController : MonoBehaviour
 
         _gunFirePossition = transform.Find("GunPossition").transform;
         _mortarFirePossition = transform.Find("MortarPossition").transform;
+        _playerHealth = _maxPlayerHealth;
+        _mortarFireDistance = 0f;
     }
 
     void Update()
@@ -62,18 +68,57 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && _lastTime > _gunFireSpeed && _gunAmmo > 0)
         {
-            Instantiate(_bulletPrefab, _gunFirePossition.position, _gunFirePossition.rotation);
+            GameObject bullet = Instantiate(_bulletPrefab, _gunFirePossition.position, _gunFirePossition.rotation);
+            bullet.GetComponent<Rigidbody>().velocity = -gameObject.transform.forward * _bulletSpeed;
             _gunAmmo--;
             _lastTime = 0f;
+            Destroy(bullet, 1f);
         }
     }
     void MortarFire()
     {
-        if (Input.GetMouseButton(1) && _lastTime > _mortarFireSpeed && _mortarAmmo > 0)
+        if(Input.GetMouseButtonDown(1) && _lastTime > _mortarFireSpeed && _mortarAmmo > 0 &&_haveMortar)
         {
-            Instantiate(_minePrefab, _mortarFirePossition.position, _mortarFirePossition.rotation);
-            _gunAmmo--;
+            if (_mortarFireDistance < _maxMortarRange)
+                _mortarFireDistance += Time.deltaTime;
+            else
+                _mortarFireDistance = _maxMortarRange;
+        }
+        if (Input.GetMouseButtonUp(1) && _lastTime > _mortarFireSpeed && _mortarAmmo > 0 && _haveMortar)
+        {
+            GameObject mine = Instantiate(_minePrefab, _mortarFirePossition.position, _mortarFirePossition.rotation);
+            mine.GetComponent<Rigidbody>().velocity = -gameObject.transform.forward * _mineSpeed;
+            _mortarAmmo--;
             _lastTime = 0f;
+            Destroy(mine, 1f);
+            _mortarFireDistance = 0f;
         }
     }
+
+    public void AmmoAdd(int ammo)
+    {
+        _gunAmmo += ammo;
+    }
+    public void HealthAdd(float health)
+    {
+        if (_playerHealth + health > _maxPlayerHealth)
+            _playerHealth = _maxPlayerHealth;
+        else
+            _playerHealth += health;
+    }
+    public void Damage(float damage)
+    {
+        if(_playerHealth - damage <= 0)
+        {
+            Debug.Log("You are Killed");
+        }
+        else
+        {
+            _playerHealth -= damage;
+        }
+    }
+    public void GiveMortar()
+    {
+        _haveMortar = true;
+    }    
 }

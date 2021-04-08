@@ -8,8 +8,9 @@ public class Turret : MonoBehaviour
     //[SerializeField] private float _turretDamage = 2f;
     [SerializeField] private float _turretRotationSpeed = 30f;
     [SerializeField] private GameObject _bulletPrefab;
-    private Transform _gunFirePossition;
     [SerializeField] private float _turretFireSpeed = 10f;
+    private Transform _gunFirePossition;
+    [SerializeField] private float _detectionRadius = 15f;
 
     private float _lastTime;
 
@@ -20,6 +21,7 @@ public class Turret : MonoBehaviour
     {
         _gunFirePossition = transform.Find("GunPossition").transform;
         _player = GameObject.FindGameObjectWithTag("Player");
+        GetComponent<SphereCollider>().radius = _detectionRadius;
     }
 
 
@@ -38,7 +40,7 @@ public class Turret : MonoBehaviour
         if(other.tag == "Player")
         {
             _playerNear = true;
-            Debug.Log("Player Find!");
+            //Debug.Log("Player Find!");
         }
     }
     private void OnTriggerExit(Collider other)
@@ -46,7 +48,7 @@ public class Turret : MonoBehaviour
         if (other.tag == "Player")
         {
             _playerNear = false;
-            Debug.Log("Player Go Out!");
+            //Debug.Log("Player Go Out!");
         }
     }
 
@@ -54,9 +56,9 @@ public class Turret : MonoBehaviour
     {
         if (_lastTime > _turretFireSpeed)
         {
-            Instantiate(_bulletPrefab, _gunFirePossition.position, _gunFirePossition.rotation);
+            GameObject bullet = Instantiate(_bulletPrefab, _gunFirePossition.position, _gunFirePossition.rotation);
             _lastTime = 0f;
-            Debug.Log("TurretFire");
+            Destroy(bullet, 1f);
         }
     }
 }

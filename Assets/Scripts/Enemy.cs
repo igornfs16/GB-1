@@ -4,15 +4,35 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private float _maxHealth;
+    private float _health;
+
+    private void Awake()
     {
-        
+        _health = _maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Damage(float damage)
     {
-        
+        if (_health - damage <= 0)
+        {
+            Destroy(gameObject);
+        }
+        else
+            _health -= damage;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Bullet")
+        {
+            Damage(1);
+            Debug.Log(_health);
+        }
+        if (other.tag == "Mine" )
+        {
+            Damage(100);
+            Debug.Log(_health);
+        }
     }
 }

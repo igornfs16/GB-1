@@ -5,6 +5,14 @@ TagManager:
   serializedVersion: 2
   tags:
   - Environment
+  - InfantrySpawnPoint
+  - TurretSpawnPoint
+  - Enemy
+  - TankSpawnPoint
+  - AmmoSpawnPoint
+  - RepairSpawnPoint
+  - Bullet
+  - Mine
   layers:
   - Default
   - TransparentFX

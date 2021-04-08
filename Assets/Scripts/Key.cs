@@ -19,7 +19,7 @@ public class Key : MonoBehaviour
         if (_openGate)
         {
             _gate.transform.position = Vector3.Lerp(_gate.transform.position, openPossition, _gateOpenSpeed);
-            Debug.Log(_openGate);
+            
         }
     }
     private void OnTriggerStay(Collider other)
@@ -27,7 +27,7 @@ public class Key : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && other.tag == "Player")
         {
             _openGate = true;
-            Debug.Log(_openGate);
+            Debug.Log("Gate Opened");
         }
             
     }
