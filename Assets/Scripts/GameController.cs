@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _repairPrefab;
     private GameObject[] _repairSpawnPoints;
 
+    private GameObject[] _liveAirDef;
 
     void Awake()
     {
@@ -32,6 +33,8 @@ public class GameController : MonoBehaviour
         Spawn(_enemyTankPrefab, _enemyTankSpawnPoints);
         Spawn(_ammoPrefab, _ammoSpawnPoints);
         Spawn(_repairPrefab, _repairSpawnPoints);
+
+        _liveAirDef = GameObject.FindGameObjectsWithTag("airdef");
     }
 
     void Spawn(GameObject prefab, GameObject[] spawnPoints)
@@ -42,4 +45,24 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if(_liveAirDef.Length == 0)
+        {
+            Win();
+        }
+        //else
+        //{
+        //    for (int i =0; i < _liveAirDef.Length; i++)
+        //    {
+        //        _liveAirDef[i]
+        //    }
+        //}
+        
+    }
+
+    void Win()
+    {
+        Debug.Log("You win!");
+    }
 }

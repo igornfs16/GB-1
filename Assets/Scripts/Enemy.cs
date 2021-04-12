@@ -5,6 +5,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _maxHealth;
+    [SerializeField] private float __damage;
+    [SerializeField] private GameObject _bulletPrefab;
     private float _health;
 
     private void Awake()
@@ -16,7 +18,9 @@ public class Enemy : MonoBehaviour
     {
         if (_health - damage <= 0)
         {
-            Destroy(gameObject);
+
+            gameObject.transform.Rotate(Vector3.left,90);
+            Destroy(gameObject,3f);
         }
         else
             _health -= damage;
@@ -26,12 +30,12 @@ public class Enemy : MonoBehaviour
     {
         if(other.tag == "Bullet")
         {
-            Damage(1);
+            Damage(20);
             Debug.Log(_health);
         }
         if (other.tag == "Mine" )
         {
-            Damage(100);
+            Damage(101);
             Debug.Log(_health);
         }
     }
