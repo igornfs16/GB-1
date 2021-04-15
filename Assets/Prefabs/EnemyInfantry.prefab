@@ -40,7 +40,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7743144448429047899}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.012033284, y: 0.16705078, z: 0.33549225}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6090010567779293054}
@@ -74,7 +74,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 100
   __damage: 0
-  _bulletPrefab: {fileID: 0}
+  _bulletPrefab: {fileID: 544867845672153613, guid: 3913a94aa1fb5bf4099bfed90cd0df47, type: 3}
+  waypoints: []
 --- !u!54 &103731879824351581
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -104,11 +105,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9d945a07a1693fc42a61122546e2c83f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.31
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9d945a07a1693fc42a61122546e2c83f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.673
+      value: 0.51
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9d945a07a1693fc42a61122546e2c83f, type: 3}
       propertyPath: m_LocalPosition.z

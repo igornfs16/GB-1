@@ -14,24 +14,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _mortarFireSpeed = 0.5f;
     [SerializeField] private float headMinY = -80f;
     [SerializeField] private float headMaxY = 80f;
-    [SerializeField] private float _sensitivity = 1f;
+    [SerializeField] private float _sensitivity = 10f;
     [SerializeField] private float _speed = 1;
     [SerializeField] private float _bulletSpeed = 300f;
     [SerializeField] private float _mineSpeed = 100f;
     [SerializeField] private float _maxMortarRange = 100f;
     [SerializeField] private bool _haveMortar = false;
-
-    private float rotationX;
-    private float rotationY;
+    [SerializeField] private Camera _camera;
+    private float _rotationX;
+    private float _rotationY;
     private float _playerHealth;
     private Transform _gunFirePossition;
     private Transform _mortarFirePossition;
     private float _mortarFireDistance;
     private Vector3 _currentPos;
     private float _lastTime;
-    
-
-   
 
 
     void Awake()
@@ -43,22 +40,29 @@ public class PlayerController : MonoBehaviour
         _mortarFireDistance = 0f;
     }
 
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     void Update()
     {
         _lastTime += Time.deltaTime;
-        _currentPos.x = -Input.GetAxis("Horizontal");
-        _currentPos.z = -Input.GetAxis("Vertical");
 
 
-        rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * _sensitivity;
-        rotationY += Input.GetAxis("Mouse Y") * _sensitivity;
-        rotationY = Mathf.Clamp(rotationY, headMinY, headMaxY);
-        transform.localEulerAngles = new Vector3(rotationY, rotationX, 0);
+        _rotationX = Input.GetAxis("Mouse X");// * _sensitivity*Time.deltaTime;
+        _rotationY -= Input.GetAxis("Mouse Y");// * _sensitivity*Time.deltaTime;
+        _rotationY = Mathf.Clamp(_rotationY, headMinY, headMaxY);
+        transform.Rotate(Vector3.up * _rotationX);
+        _camera.transform.localRotation = Quaternion.Euler(_rotationY+180, 0, 180);
+        _gunFirePossition.rotation = _camera.transform.rotation;
         
     }
 
     private void FixedUpdate()
     {
+        _currentPos.x = -Input.GetAxis("Horizontal");
+        _currentPos.z = -Input.GetAxis("Vertical");
         var move = _currentPos * _speed * Time.fixedDeltaTime;
         transform.Translate(move);
         GunFire();
@@ -69,9 +73,9 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && _lastTime > _gunFireSpeed && _gunAmmo > 0)
         {
-            Quaternion q = new Quaternion(_gunFirePossition.rotation.x+90, _gunFirePossition.rotation.y, _gunFirePossition.rotation.z,0);
+            Quaternion q = new Quaternion(_gunFirePossition.rotation.x+90, _gunFirePossition.rotation.y, _gunFirePossition.rotation.z, 0);
             GameObject bullet = Instantiate(_bulletPrefab, _gunFirePossition.position, _gunFirePossition.rotation);
-            bullet.GetComponent<Rigidbody>().velocity = -gameObject.transform.forward * _bulletSpeed;
+            bullet.GetComponent<Rigidbody>().velocity = -_gunFirePossition.rotation.eulerAngles * _bulletSpeed;
             _gunAmmo--;
             _lastTime = 0f;
             Destroy(bullet, 1f);
