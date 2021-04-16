@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _maxMortarRange = 100f;
     [SerializeField] private bool _haveMortar = false;
     [SerializeField] private Camera _camera;
+
     private float _rotationX;
     private float _rotationY;
     private float _playerHealth;
@@ -49,7 +50,9 @@ public class PlayerController : MonoBehaviour
     {
         _lastTime += Time.deltaTime;
 
-
+        /*
+         * Поменял вращения согласно примеру прошлого урока, но это сильно поломало мои вращений. Пришлось немного повращать камеру "вручную"
+         */
         _rotationX = Input.GetAxis("Mouse X");// * _sensitivity*Time.deltaTime;
         _rotationY -= Input.GetAxis("Mouse Y");// * _sensitivity*Time.deltaTime;
         _rotationY = Mathf.Clamp(_rotationY, headMinY, headMaxY);
