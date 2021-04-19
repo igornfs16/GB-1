@@ -9,6 +9,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float __damage;
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private GameObject[] waypoints;
+    [SerializeField] private float _sightRange = 30;
+    [SerializeField] private float _attackRange = 15;
+
+    private bool _playerDetected = false;
     private int _currentPoint;
     private float _health;
     private NavMeshAgent _navMesh;
@@ -39,22 +43,11 @@ public class Enemy : MonoBehaviour
         else
             _health -= damage;
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "Bullet")
-        {
-            Damage(20);
-            Debug.Log(_health);
-        }
-        if (other.tag == "Mine" )
-        {
-            Damage(101);
-            Debug.Log(_health);
-        }
-    }
+
+
     private void Update()
     {
-        if (waypoints.Length > 0 && !_navMesh.hasPath)
+        if (waypoints.Length > 0 && !_navMesh.hasPath && !_playerDetected)
         {
             Patrol();
         }
@@ -71,4 +64,5 @@ public class Enemy : MonoBehaviour
             _currentPoint = -1;
         }
     }
+
 }
