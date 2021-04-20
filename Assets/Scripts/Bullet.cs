@@ -32,6 +32,10 @@ public class Bullet : MonoBehaviour
         {
             other.GetComponent<Enemy>().Damage(_damage);
         }
+        if (other.tag == "Player")
+        {
+            other.GetComponent<PlayerController>().Damage(_damage);
+        }
         Destroy(gameObject);
     }
 }

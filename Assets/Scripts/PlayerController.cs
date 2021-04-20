@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     {
 
         _gunFirePossition = GetComponentInChildren<Camera>().transform.Find("GunPossition").transform;
-        _mortarFirePossition = transform.Find("MortarPossition").transform;
+        _mortarFirePossition = GetComponentInChildren<Camera>().transform.Find("MortarPossition").transform;
         _playerHealth = _maxPlayerHealth;
         _mortarFireForce = 0f;
     }
@@ -66,7 +66,20 @@ public class PlayerController : MonoBehaviour
         //_gunFirePossition.Rotate(_camera.transform.rotation.eulerAngles);
         _direction = transform.forward;
 
-        Debug.DrawLine(transform.position + new Vector3(0,1,1), Vector3.forward * Mathf.Infinity, Color.black);
+        if (Input.GetMouseButton(0) && _lastTime > _gunFireSpeed && _gunAmmo > 0)
+        {
+            GunFire();
+        }
+
+        if (Input.GetMouseButtonDown(1) && _lastTime > _mortarFireSpeed && _mortarAmmo > 0 && _haveMortar)
+        {
+            MortarFireStart();
+            //Invoke("MortarFireStart",0f);
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            MortarFire();
+        }
     }
 
     private void FixedUpdate()
@@ -75,20 +88,8 @@ public class PlayerController : MonoBehaviour
         _currentPos.z = -Input.GetAxis("Vertical");
         var move = _currentPos * _speed * Time.fixedDeltaTime;
         transform.Translate(move);
-
-        if (Input.GetMouseButton(0) && _lastTime > _gunFireSpeed && _gunAmmo > 0)
-        {
-            GunFire();
-        }
-        if (Input.GetMouseButton(1) && _lastTime > _mortarFireSpeed && _mortarAmmo > 0 && _haveMortar)
-        {
-            MortarFireStart();
-            if (Input.GetMouseButtonUp(1))
-            {
-                MortarFire();
-            }
-        }
         
+        Debug.DrawLine(transform.position + new Vector3(0, 1, 1), Vector3.forward * Mathf.Infinity, Color.black);
     }
 
     void GunFire()
@@ -101,20 +102,24 @@ public class PlayerController : MonoBehaviour
             _lastTime = 0f;
             Destroy(bullet, 3f);
     }
-
     void MortarFireStart()
     {
         _UIFireForce.gameObject.SetActive(true);
         Debug.Log("MortarFireForceDOWN");
         if (_mortarFireForce < _maxMortarForce)
         {
-            _mortarFireForce += Time.deltaTime*100;
-            _UIFireForce.value += Time.deltaTime * 100;
-            Debug.Log("Mortar Power: "+ _mortarFireForce.ToString());
+            _mortarFireForce += Time.deltaTime * 5;
+            _UIFireForce.value += Time.deltaTime * 5;
+            Debug.Log("Mortar Power: " + _mortarFireForce.ToString());
         }
         else
             _mortarFireForce = _maxMortarForce;
-
+        //while((_mortarFireForce <= _maxMortarForce) && Input.GetMouseButtonDown(1))
+        //{
+        //    _mortarFireForce += Time.deltaTime * 50;
+        //    _UIFireForce.value += Time.deltaTime * 50;
+        //    Debug.Log("Mortar Power: "+ _mortarFireForce.ToString());
+        //}
     }
 
     void MortarFire()
@@ -122,7 +127,8 @@ public class PlayerController : MonoBehaviour
         GameObject mine = Instantiate(_minePrefab, _mortarFirePossition.position, _mortarFirePossition.rotation);
         Debug.Log("MortarFireForceUP");
         //mine.GetComponent<Rigidbody>().velocity = -(gameObject.transform.forward+Vector3.up) * _mortarFireForce * _mineSpeed;
-        mine.GetComponent<Rigidbody>().AddForce((gameObject.transform.forward + Vector3.up) * _mortarFireForce);
+        mine.GetComponent<Mine>().Init(_mortarFirePossition,_mortarFireForce);
+        
         _mortarAmmo--;
         _lastTime = 0f;
         //Destroy(mine, 1f);

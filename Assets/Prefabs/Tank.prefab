@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2342263212467651703
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 154209260471718651}
+  m_Layer: 0
+  m_Name: GunPossition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &154209260471718651
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2342263212467651703}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.41, z: 9.21}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2712266963374058734}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2712266962995809575
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,7 +135,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2712266963374058734}
   - component: {fileID: 1195770717142318249}
-  - component: {fileID: 1805340097648327067}
+  - component: {fileID: 3607262184281975301}
+  - component: {fileID: 2146781815491760221}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -127,6 +158,7 @@ Transform:
   - {fileID: 2712266962995809574}
   - {fileID: 2430891204135949658}
   - {fileID: 5240531225895385496}
+  - {fileID: 154209260471718651}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -143,7 +175,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 7.1896358, y: 2.6982393, z: 17.493896}
   m_Center: {x: 0.2295878, y: 1.3600392, z: -2.2300892}
---- !u!114 &1805340097648327067
+--- !u!114 &3607262184281975301
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,10 +184,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 2712266963374058735}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2202322594f0c7940a8cb6ffbd55f31c, type: 3}
+  m_Script: {fileID: 11500000, guid: d2aa302f8a854554b8c7fe3ca6048a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Health: 1000
+  _maxHealth: 500
+  __damage: 100
+  _bulletPrefab: {fileID: 544867845672153613, guid: 3913a94aa1fb5bf4099bfed90cd0df47, type: 3}
+  waypoints: []
+  _sightRange: 30
+  _attackRange: 15
+  _fireSpeed: 15
+--- !u!195 &2146781815491760221
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2712266963374058735}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6510245877429059053
 GameObject:
   m_ObjectHideFlags: 0

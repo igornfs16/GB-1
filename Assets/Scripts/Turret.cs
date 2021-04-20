@@ -9,11 +9,11 @@ public class Turret : MonoBehaviour
     [SerializeField] private float _turretRotationSpeed = 30f;
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private float _turretFireSpeed = 10f;
-    private Transform _gunFirePossition;
+    
     [SerializeField] private float _detectionRadius = 15f;
 
     private float _lastTime;
-
+    private Transform _gunFirePossition;
     private bool _playerNear = false;
     private GameObject _player;
 

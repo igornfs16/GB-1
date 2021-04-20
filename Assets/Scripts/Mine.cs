@@ -15,13 +15,17 @@ public class Mine : MonoBehaviour
     public float GetDamage()
     {
         return _damage;
-
     }
+
     public void Init(Transform target, float fireForce)
     {
         _target = target;
         _fireForce = fireForce;
     }
 
+    private void Awake()
+    {
+        gameObject.GetComponent<Rigidbody>().AddForce((gameObject.transform.forward + Vector3.up) * _fireForce*100);
+    }
 
 }

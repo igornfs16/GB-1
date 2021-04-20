@@ -28,13 +28,18 @@ public class GameController : MonoBehaviour
         _enemyTankSpawnPoints = GameObject.FindGameObjectsWithTag("TankSpawnPoint");
         _ammoSpawnPoints = GameObject.FindGameObjectsWithTag("AmmoSpawnPoint");
         _repairSpawnPoints = GameObject.FindGameObjectsWithTag("RepairSpawnPoint");
+        
+
+        _liveAirDef = GameObject.FindGameObjectsWithTag("airdef");
+    }
+
+    void Start()
+    {
         Spawn(_enemyInfantryPrefab, _enemyInfantrySpawnPoints);
         Spawn(_enemyTurretPrefab, _enemyTurretSpawnPoints);
         Spawn(_enemyTankPrefab, _enemyTankSpawnPoints);
         Spawn(_ammoPrefab, _ammoSpawnPoints);
         Spawn(_repairPrefab, _repairSpawnPoints);
-
-        _liveAirDef = GameObject.FindGameObjectsWithTag("airdef");
     }
 
     void Spawn(GameObject prefab, GameObject[] spawnPoints)
@@ -58,7 +63,6 @@ public class GameController : MonoBehaviour
         //        _liveAirDef[i]
         //    }
         //}
-        
     }
 
     void Win()
