@@ -9,20 +9,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _maxPlayerHealth = 1000;
     [SerializeField] private int _gunAmmo = 500;
     [SerializeField] private GameObject _bulletPrefab;
-    [SerializeField] private float _gunFireSpeed = 0.1f;
+    [SerializeField] private float _gunFireRate = 0.1f;
+    [SerializeField] private float _mortarFireRate = 0.5f;
     [SerializeField] private int _mortarAmmo = 100;
     [SerializeField] private GameObject _minePrefab;
-    [SerializeField] private float _mortarFireSpeed = 0.5f;
     [SerializeField] private float headMinY = -80f;
     [SerializeField] private float headMaxY = 80f;
     //[SerializeField] private float _sensitivity = 10f;
     [SerializeField] private float _speed = 1;
-    [SerializeField] private float _bulletSpeed = 300f;
-    [SerializeField] private float _mineSpeed = 100f;
-    [SerializeField] private float _maxMortarForce = 100f;
+    [SerializeField] private float _bulletSpeed = 200f;
+    [SerializeField] private float _mineSpeed = 0.3f;
+    [SerializeField] private float _maxMortarForce = 50f;
     [SerializeField] private bool _haveMortar = false;
     [SerializeField] private Camera _camera;
     [SerializeField] private Slider _UIFireForce;
+    [SerializeField] private Text _UIPlayerHealth;
 
     private float _rotationX;
     private float _rotationY;
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour
         _mortarFirePossition = GetComponentInChildren<Camera>().transform.Find("MortarPossition").transform;
         _playerHealth = _maxPlayerHealth;
         _mortarFireForce = 0f;
+        
     }
 
     private void Start()
@@ -54,32 +56,28 @@ public class PlayerController : MonoBehaviour
     {
         _lastTime += Time.deltaTime;
 
-        /*
-         * Поменял вращения согласно примеру прошлого урока, но это сильно поломало мои вращений. Пришлось немного повращать камеру "вручную"
-         */
-        _rotationX = Input.GetAxis("Mouse X");// * _sensitivity*Time.deltaTime;
-        _rotationY -= Input.GetAxis("Mouse Y");// * _sensitivity*Time.deltaTime;
+        _rotationX = Input.GetAxis("Mouse X");
+        _rotationY -= Input.GetAxis("Mouse Y");
         _rotationY = Mathf.Clamp(_rotationY, headMinY, headMaxY);
         transform.Rotate(Vector3.up * _rotationX);
-        //_camera.transform.localRotation = Quaternion.Euler(_rotationY+180, 0, 180);
         _camera.transform.localRotation = Quaternion.Euler(-_rotationY + 180, 0, 180);
-        //_gunFirePossition.Rotate(_camera.transform.rotation.eulerAngles);
-        _direction = transform.forward;
 
-        if (Input.GetMouseButton(0) && _lastTime > _gunFireSpeed && _gunAmmo > 0)
+        _direction = transform.forward;
+        
+
+        if (Input.GetMouseButton(0) && _lastTime > _gunFireRate && _gunAmmo > 0)
         {
             GunFire();
         }
-
-        if (Input.GetMouseButtonDown(1) && _lastTime > _mortarFireSpeed && _mortarAmmo > 0 && _haveMortar)
+        if (Input.GetMouseButton(1) && _lastTime > _mortarFireRate && _mortarAmmo > 0 && _haveMortar)
         {
             MortarFireStart();
-            //Invoke("MortarFireStart",0f);
         }
         if (Input.GetMouseButtonUp(1))
         {
             MortarFire();
         }
+        _UIPlayerHealth.text = "Health: " + _playerHealth.ToString();
     }
 
     private void FixedUpdate()
@@ -108,30 +106,24 @@ public class PlayerController : MonoBehaviour
         Debug.Log("MortarFireForceDOWN");
         if (_mortarFireForce < _maxMortarForce)
         {
-            _mortarFireForce += Time.deltaTime * 5;
-            _UIFireForce.value += Time.deltaTime * 5;
+            _mortarFireForce += Time.deltaTime * 30;
+            //_UIFireForce.value += Time.deltaTime * 30;
             Debug.Log("Mortar Power: " + _mortarFireForce.ToString());
         }
         else
             _mortarFireForce = _maxMortarForce;
-        //while((_mortarFireForce <= _maxMortarForce) && Input.GetMouseButtonDown(1))
-        //{
-        //    _mortarFireForce += Time.deltaTime * 50;
-        //    _UIFireForce.value += Time.deltaTime * 50;
-        //    Debug.Log("Mortar Power: "+ _mortarFireForce.ToString());
-        //}
     }
 
     void MortarFire()
     {
         GameObject mine = Instantiate(_minePrefab, _mortarFirePossition.position, _mortarFirePossition.rotation);
         Debug.Log("MortarFireForceUP");
-        //mine.GetComponent<Rigidbody>().velocity = -(gameObject.transform.forward+Vector3.up) * _mortarFireForce * _mineSpeed;
-        mine.GetComponent<Mine>().Init(_mortarFirePossition,_mortarFireForce);
+        mine.GetComponent<Rigidbody>().velocity = (_camera.transform.forward + Vector3.up * (Vector3.Magnitude(_camera.transform.forward))) * _mortarFireForce*_mineSpeed;
+        //mine.GetComponent<Mine>().Init(_mortarFirePossition,_mortarFireForce);
         
         _mortarAmmo--;
         _lastTime = 0f;
-        //Destroy(mine, 1f);
+        //Destroy(mine, 4f);
         _mortarFireForce = 0f;
         _UIFireForce.gameObject.SetActive(false);
         

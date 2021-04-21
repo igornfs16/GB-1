@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2749621370799515363}
   - component: {fileID: 4669069840691288530}
   - component: {fileID: 8214328418193702840}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 1032773194988972836}
   - component: {fileID: 6916662164305835301}
   - component: {fileID: 3237911801211380233}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 2516319475930287409}
   - component: {fileID: 2140289681466221194}
   - component: {fileID: 303489097}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Robot
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -213,19 +213,20 @@ MonoBehaviour:
   _maxPlayerHealth: 1000
   _gunAmmo: 500
   _bulletPrefab: {fileID: 544867845672153613, guid: 3913a94aa1fb5bf4099bfed90cd0df47, type: 3}
-  _gunFireSpeed: 0.1
+  _gunFireRate: 0.1
+  _mortarFireRate: 0.5
   _mortarAmmo: 500
   _minePrefab: {fileID: 453390418343759033, guid: 468a6c4a335dbbd41b8e7cd18a692d5f, type: 3}
-  _mortarFireSpeed: 0.5
   headMinY: -80
   headMaxY: 80
-  _speed: 10
-  _bulletSpeed: 120
-  _mineSpeed: 100
-  _maxMortarForce: 100
-  _haveMortar: 0
+  _speed: 15
+  _bulletSpeed: 200
+  _mineSpeed: 0.3
+  _maxMortarForce: 50
+  _haveMortar: 1
   _camera: {fileID: 48747495460686046}
   _UIFireForce: {fileID: 0}
+  _UIPlayerHealth: {fileID: 0}
 --- !u!65 &2516319475930287409
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -237,8 +238,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.8816872, y: 5.716935, z: 4.428362}
-  m_Center: {x: 0.15238428, y: 2.3584676, z: -4.6752987}
+  m_Size: {x: 2.8816872, y: 5.347727, z: 2.1331787}
+  m_Center: {x: 0.15238428, y: 2.1738634, z: -4.891083}
 --- !u!54 &2140289681466221194
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -364,7 +365,7 @@ GameObject:
   - component: {fileID: 4462829611155176168}
   - component: {fileID: 2298026302059304232}
   - component: {fileID: 3593873450277944785}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -445,7 +446,7 @@ GameObject:
   - component: {fileID: 168886396254361700}
   - component: {fileID: 9125311954515464681}
   - component: {fileID: 8685233954996217614}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -526,7 +527,7 @@ GameObject:
   - component: {fileID: 3245880495094956633}
   - component: {fileID: 5358607656633693447}
   - component: {fileID: 8162783145664330457}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -605,7 +606,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3093963035337937341}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MortarPossition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -620,7 +621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3945276401401974824}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: -1.3699986, y: -0.19299984, z: -0.37000322}
+  m_LocalPosition: {x: -1.406, y: -0.19299984, z: 0.114}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6728257490686219205}
@@ -637,7 +638,7 @@ GameObject:
   - component: {fileID: 7638659818809823529}
   - component: {fileID: 5204693572496997090}
   - component: {fileID: 5996457748548000749}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -716,7 +717,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4792652391809729931}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Robot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -756,7 +757,7 @@ GameObject:
   - component: {fileID: 347576260908992763}
   - component: {fileID: 8674156928127828374}
   - component: {fileID: 4338340741578577029}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -837,7 +838,7 @@ GameObject:
   - component: {fileID: 8716335418433915479}
   - component: {fileID: 1631582052570989384}
   - component: {fileID: 771268956292010016}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -918,7 +919,7 @@ GameObject:
   - component: {fileID: 6728257490686219205}
   - component: {fileID: 48747495460686046}
   - component: {fileID: 2302982378765698757}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1002,7 +1003,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6145634994870444505}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GunPossition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1017,7 +1018,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6250736012244689112}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.81, y: -0.109, z: 1.06}
+  m_LocalPosition: {x: 0.728, y: -0.059, z: 1.524}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6728257490686219205}
@@ -1034,7 +1035,7 @@ GameObject:
   - component: {fileID: 1747680532898354052}
   - component: {fileID: 7449996430782664711}
   - component: {fileID: 8656247345300103202}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1115,7 +1116,7 @@ GameObject:
   - component: {fileID: 2816646317942024596}
   - component: {fileID: 1897478268788992277}
   - component: {fileID: 6414223545721051796}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1196,7 +1197,7 @@ GameObject:
   - component: {fileID: 3271561077121087804}
   - component: {fileID: 7382787118218169001}
   - component: {fileID: 3032677416220534041}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere001
   m_TagString: Untagged
   m_Icon: {fileID: 0}

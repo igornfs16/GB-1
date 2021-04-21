@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 757916082781487745}
   - component: {fileID: 7595426528909343700}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: airdef
   m_TagString: airdef
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 8610677718978946891}
   - component: {fileID: 9172808311423220360}
   - component: {fileID: 5691914903965908697}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,7 +155,7 @@ GameObject:
   - component: {fileID: 8635532702780742527}
   - component: {fileID: 4456097057710286217}
   - component: {fileID: 7708215191938560739}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,7 +251,7 @@ GameObject:
   - component: {fileID: 8559053056861365796}
   - component: {fileID: 2897922119469254144}
   - component: {fileID: 2113029640960501899}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 2429470217666011306}
   - component: {fileID: 4168447487463281507}
   - component: {fileID: 1369975188441045270}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
