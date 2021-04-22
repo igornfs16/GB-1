@@ -12,7 +12,7 @@ public class Key : MonoBehaviour
     private Vector3 openPossition;
     private void Awake()
     {
-        openPossition = new Vector3(_gate.transform.position.x, _gate.transform.position.y - 15, _gate.transform.position.z);
+        openPossition = new Vector3(_gate.transform.position.x, _gate.transform.position.y - 30, _gate.transform.position.z);
     }
 
     private void Update()

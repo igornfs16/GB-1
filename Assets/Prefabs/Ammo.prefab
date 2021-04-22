@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9029784235294219592}
   - component: {fileID: 9029784235294219597}
   - component: {fileID: 9029784235294219598}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 9029784236739900447}
   - component: {fileID: 9029784236739900440}
   - component: {fileID: 9029784236739900446}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Ammo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
