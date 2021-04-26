@@ -53,7 +53,6 @@ public class PlayerController : MonoBehaviour
         _playerHealth = _maxPlayerHealth;
         _mortarFireForce = 10f;
         _animator = gameObject.GetComponent<Animator>();
-        gc = new GameController();
     }
 
     private void Start()
@@ -66,28 +65,31 @@ public class PlayerController : MonoBehaviour
     {
         _lastTime += Time.deltaTime;
 
-        _rotationX = Input.GetAxis("Mouse X");
-        _rotationY -= Input.GetAxis("Mouse Y");
+        if (!GameController._menuOpened)
+        {
+            _rotationX = Input.GetAxis("Mouse X");
+            _rotationY -= Input.GetAxis("Mouse Y");
+        }
         _rotationY = Mathf.Clamp(_rotationY, headMinY, headMaxY);
         transform.Rotate(Vector3.up * _rotationX);
         _camera.transform.localRotation = Quaternion.Euler(-_rotationY + 180, 0, 180);
 
         _direction = transform.forward;
 
-        if (Input.GetMouseButton(0) && _lastTime > _gunFireRate && _gunAmmo > 0)
+        if (Input.GetMouseButton(0) && _lastTime > _gunFireRate && _gunAmmo > 0 && !GameController._menuOpened)
         {
             GunFire();
         }
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && !GameController._menuOpened)
         {
             _animator.SetBool("PlayerFire", false);
         }
 
-        if (Input.GetMouseButton(1) && _lastTime > _mortarFireRate && _mortarAmmo > 0 && _haveMortar)
+        if (Input.GetMouseButton(1) && _lastTime > _mortarFireRate && _mortarAmmo > 0 && _haveMortar && !GameController._menuOpened)
         {
             MortarFireStart();
         }
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(1) && !GameController._menuOpened)
         {
             MortarFire();
         }
@@ -98,8 +100,12 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _currentPos.x = -Input.GetAxis("Horizontal");
-        _currentPos.z = -Input.GetAxis("Vertical");
+        if(!GameController._menuOpened)
+        {
+            _currentPos.x = -Input.GetAxis("Horizontal");
+            _currentPos.z = -Input.GetAxis("Vertical");
+        }
+        
         var move = _currentPos * _speed * Time.fixedDeltaTime;
         transform.Translate(move);
 
@@ -145,7 +151,8 @@ public class PlayerController : MonoBehaviour
         lr.material = _fireMaterial;
         lr.startColor = Color.red;
         lr.endColor = Color.yellow;
-        lr.SetWidth(0.1f, 0.1f);
+        lr.startWidth = 0.1f;
+        lr.endWidth = 0.1f;
         lr.SetPosition(0, start);
         lr.SetPosition(1, end);
         //Debug.Log(start);
@@ -159,7 +166,7 @@ public class PlayerController : MonoBehaviour
         if (_mortarFireForce < _maxMortarForce)
         {
             _mortarFireForce += Time.deltaTime * 30;
-            //_UIFireForce.value += Time.deltaTime * 30;
+            _UIFireForce.value = _mortarFireForce;
             Debug.Log("Mortar Power: " + _mortarFireForce.ToString());
         }
         else
@@ -177,6 +184,7 @@ public class PlayerController : MonoBehaviour
         _lastTime = 0f;
         //Destroy(mine, 4f);
         _mortarFireForce = 10f;
+        _UIFireForce.value += _mortarFireForce;
         _UIFireForce.gameObject.SetActive(false);
         
     }
@@ -201,7 +209,7 @@ public class PlayerController : MonoBehaviour
         if(_playerHealth - damage <= 0)
         {
             //Debug.Log("You are Killed");
-            gc.Loose();
+            GameController._youLoose = true;
         }
         else
         {

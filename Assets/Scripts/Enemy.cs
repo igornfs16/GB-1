@@ -107,7 +107,7 @@ public class Enemy : MonoBehaviour
                 Invoke("GoBack",3);
             }     
         }
-        Debug.Log(_playerInForwardLook.ToString());
+        //Debug.Log(_playerInForwardLook.ToString());
     }
     private void FixedUpdate()
     {
@@ -129,7 +129,7 @@ public class Enemy : MonoBehaviour
         //}
             
 
-        Debug.DrawRay(transform.position, _player.transform.position - transform.position, Color.green);
+        //Debug.DrawRay(transform.position, _player.transform.position - transform.position, Color.green);
     }
     private void GoBack()
     {
@@ -156,7 +156,7 @@ public class Enemy : MonoBehaviour
         //Debug.Log("Player founded!");
         if (_enemyType != _enemyTypes.Turret)
         {
-            Debug.Log("I am " + _enemyType.ToString() + " and I see you");
+            //Debug.Log("I am " + _enemyType.ToString() + " and I see you");
             _navMesh.SetDestination(_player.transform.position);
         }
         if (Vector3.Distance(transform.position, _player.transform.position) < _attackRange)
@@ -170,7 +170,7 @@ public class Enemy : MonoBehaviour
     }
     private void Fire()
     {
-        Debug.Log("I am " + _enemyType.ToString() + " and I'll kill you");
+        //Debug.Log("I am " + _enemyType.ToString() + " and I'll kill you");
         if (_lastTime > _fireSpeed)
         {
             Bullet bullet = Instantiate(_bulletPrefab, _gunFirePossition.position, _gunFirePossition.rotation).GetComponent<Bullet>();

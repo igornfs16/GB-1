@@ -26,6 +26,11 @@ public class GameController : MonoBehaviour
 
     [SerializeField] private Text _winLooseText;
 
+    [SerializeField] private Canvas _menu;
+
+    public static bool _menuOpened;
+    public static bool _youLoose;
+
     void Awake()
     {
         _enemyInfantrySpawnPoints = GameObject.FindGameObjectsWithTag("InfantrySpawnPoint");
@@ -34,6 +39,7 @@ public class GameController : MonoBehaviour
         _ammoSpawnPoints = GameObject.FindGameObjectsWithTag("AmmoSpawnPoint");
         _repairSpawnPoints = GameObject.FindGameObjectsWithTag("RepairSpawnPoint");
         _liveAirDef = GameObject.FindGameObjectsWithTag("airdef");
+        _youLoose = false;
     }
 
     void Start()
@@ -47,6 +53,8 @@ public class GameController : MonoBehaviour
         _airDefNum = _liveAirDef.Length;
 
         _winLooseText.enabled = false;
+        _menu.enabled = false;
+        _menuOpened = false;
     }
 
     void Spawn(GameObject prefab, GameObject[] spawnPoints)
@@ -64,18 +72,42 @@ public class GameController : MonoBehaviour
         {
             Win();
         }
-        //else
-        //{
-        //    for (int i =0; i < _liveAirDef.Length; i++)
-        //    {
-        //        _liveAirDef[i]
-        //    }
-        //}
-
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(_youLoose)
         {
-
+            Loose();
         }
+        if (Input.GetKeyDown(KeyCode.Escape) && !_menuOpened)
+        {
+            OpenMenu(true);
+        }
+        else if(Input.GetKeyDown(KeyCode.Escape) && _menuOpened)
+        {
+            OpenMenu(false);
+        }
+    }
+    public void Exit()
+    {
+        SceneManager.LoadScene("MainMenu");
+        OpenMenu(false);
+        Cursor.lockState = CursorLockMode.None;
+    }
+    public void OpenMenu(bool value)
+    {
+        _menu.enabled = value;
+        Cursor.lockState = CursorLockMode.None;
+        _menuOpened = value;
+        if(value)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1f;
+        }
+            
+
     }
 
     public static void AirDefKilled()
@@ -83,16 +115,14 @@ public class GameController : MonoBehaviour
         _airDefNum--;
     }
 
-    public void Loose()
+    private void Loose()
     {
-        Debug.Log("You Loose!");
         _winLooseText.enabled = true;
         _winLooseText.text = "GAMEOVER";
     }
 
     void Win()
     {
-        Debug.Log("You win!");
         _winLooseText.enabled = true;
         GameObject.Find("Gate3").transform.Translate(0f,-30f,0f);
     }
