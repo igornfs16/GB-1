@@ -27,6 +27,8 @@ public class Mine : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("BOOOOOOM");
+        if (other.tag == "Ambish")
+            return;
         Boom();
     }
     private void Boom()
@@ -45,6 +47,10 @@ public class Mine : MonoBehaviour
             if(hit.CompareTag("Player"))
             {
                 hit.GetComponent<PlayerController>().Damage(_damage);
+            }
+            if (hit.tag == "airdef")
+            {
+                hit.GetComponent<airdef>().Damage(_damage);
             }
             if (hit.TryGetComponent<Rigidbody>(out rb))
             {

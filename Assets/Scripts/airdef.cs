@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class airdef : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] float _maxHealth;
+    private float _health;
+
+    private void Awake()
     {
-        
+        _health = _maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Damage(float damage)
     {
-        
+        if (_health - damage <= 0)
+        {
+            Death();
+        }
+        else
+        {
+            _health -= damage;
+            Debug.Log(_health);
+        }
+            
+    }
+
+    private void Death()
+    {
+        GameController.AirDefKilled();
+        Destroy(gameObject);
     }
 }

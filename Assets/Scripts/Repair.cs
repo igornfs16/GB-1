@@ -6,6 +6,7 @@ public class Repair : MonoBehaviour
 {
     [SerializeField] private int _healthAdd = 100;
 
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
