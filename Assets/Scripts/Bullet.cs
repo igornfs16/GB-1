@@ -28,14 +28,20 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Enemy")
-        {
-            other.GetComponent<Enemy>().Damage(_damage);
-        }
+        //if (other.tag == "Enemy")
+        //{
+        //    other.GetComponent<Enemy>().Damage(_damage);
+        //}
+        if (other.tag == "Ambish")
+            return;
         if (other.tag == "Player")
         {
             other.GetComponent<PlayerController>().Damage(_damage);
         }
+        //if (other.tag == "airdef")
+        //{
+        //    other.GetComponent<airdef>().Damage(_damage);
+        //}
         Destroy(gameObject);
     }
 }

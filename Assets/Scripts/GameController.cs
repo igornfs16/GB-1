@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -20,6 +22,9 @@ public class GameController : MonoBehaviour
     private GameObject[] _repairSpawnPoints;
 
     private GameObject[] _liveAirDef;
+    private static int _airDefNum;
+
+    [SerializeField] private Text _winLooseText;
 
     void Awake()
     {
@@ -28,8 +33,6 @@ public class GameController : MonoBehaviour
         _enemyTankSpawnPoints = GameObject.FindGameObjectsWithTag("TankSpawnPoint");
         _ammoSpawnPoints = GameObject.FindGameObjectsWithTag("AmmoSpawnPoint");
         _repairSpawnPoints = GameObject.FindGameObjectsWithTag("RepairSpawnPoint");
-        
-
         _liveAirDef = GameObject.FindGameObjectsWithTag("airdef");
     }
 
@@ -40,19 +43,24 @@ public class GameController : MonoBehaviour
         Spawn(_enemyTankPrefab, _enemyTankSpawnPoints);
         Spawn(_ammoPrefab, _ammoSpawnPoints);
         Spawn(_repairPrefab, _repairSpawnPoints);
+
+        _airDefNum = _liveAirDef.Length;
+
+        _winLooseText.enabled = false;
     }
 
     void Spawn(GameObject prefab, GameObject[] spawnPoints)
     {
         for (int i = 0; i < spawnPoints.Length; i++)
         {
-            Instantiate(prefab, spawnPoints[i].transform);
+            GameObject go;
+            go = Instantiate(prefab, spawnPoints[i].transform.position, Quaternion.identity,spawnPoints[i].transform);
         }
     }
 
     private void Update()
     {
-        if(_liveAirDef.Length == 0)
+        if(_airDefNum == 0)
         {
             Win();
         }
@@ -63,10 +71,29 @@ public class GameController : MonoBehaviour
         //        _liveAirDef[i]
         //    }
         //}
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+
+        }
+    }
+
+    public static void AirDefKilled()
+    {
+        _airDefNum--;
+    }
+
+    public void Loose()
+    {
+        Debug.Log("You Loose!");
+        _winLooseText.enabled = true;
+        _winLooseText.text = "GAMEOVER";
     }
 
     void Win()
     {
         Debug.Log("You win!");
+        _winLooseText.enabled = true;
+        GameObject.Find("Gate3").transform.Translate(0f,-30f,0f);
     }
 }

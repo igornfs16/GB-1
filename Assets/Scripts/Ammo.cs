@@ -6,6 +6,7 @@ public class Ammo : MonoBehaviour
 {
     [SerializeField] private int _ammoAdd = 100;
 
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
