@@ -13,7 +13,8 @@ public class Repair : MonoBehaviour
         {
             PlayerController player = other.GetComponentInChildren<PlayerController>();
             player.HealthAdd(_healthAdd);
-            Destroy(gameObject);
+            gameObject.GetComponent<AudioSource>().Play();
+            Destroy(gameObject,0.5f);
         }
     }
 }
