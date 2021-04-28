@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     //[SerializeField] private bool _isTurret = false;
     [SerializeField] private LayerMask _mask;
 
-    
+    private bool _isAlive;
     private Transform _gunFirePossition;
     private bool _playerInForwardLook = false;
     private int _currentPoint;
@@ -37,8 +37,8 @@ public class Enemy : MonoBehaviour
     {
         _gunFirePossition = transform.Find("GunPossition").transform;
         _health = _maxHealth;
-        
-        if(gameObject.name.Contains("EnemyInfantry"))
+        _isAlive = true;
+        if (gameObject.name.Contains("EnemyInfantry"))
         {
             _enemyType = _enemyTypes.Infantry;
         }
@@ -87,49 +87,57 @@ public class Enemy : MonoBehaviour
     }
     private void Update()
     {
-        _lastTime += Time.deltaTime;
-        //if (!_isTurret)
-        //{
-        //    if (waypoints.Length > 0 && !_navMesh.hasPath && !_playerDetected)
-        //    {
-        //        Patrol();
-        //    }
-        //}
-        if ((Vector3.Distance(transform.position, _player.transform.position) < _sightRange) && _playerInForwardLook)
+        if(_isAlive)
         {
-            PlayerFounded();
-        }
-        if ((Vector3.Distance(transform.position, _player.transform.position) > _sightRange) && _playerInForwardLook)
-        {
-            if (_enemyType != _enemyTypes.Turret)
+            _lastTime += Time.deltaTime;
+            //if (!_isTurret)
+            //{
+            //    if (waypoints.Length > 0 && !_navMesh.hasPath && !_playerDetected)
+            //    {
+            //        Patrol();
+            //    }
+            //}
+            if ((Vector3.Distance(transform.position, _player.transform.position) < _sightRange) && _playerInForwardLook)
             {
-                //Debug.Log("I return to: " + _spawnPoint.ToString());
-                Invoke("GoBack",3);
-            }     
+                PlayerFounded();
+            }
+            if ((Vector3.Distance(transform.position, _player.transform.position) > _sightRange) && _playerInForwardLook)
+            {
+                if (_enemyType != _enemyTypes.Turret)
+                {
+                    //Debug.Log("I return to: " + _spawnPoint.ToString());
+                    Invoke("GoBack", 3);
+                }
+            }
         }
         //Debug.Log(_playerInForwardLook.ToString());
     }
     private void FixedUpdate()
     {
-        RaycastHit _raycast;
-        bool rayCast = Physics.Raycast(transform.position, _player.transform.position - transform.position, out _raycast, _sightRange,_mask);
-
-        if (rayCast)
-            if (_raycast.collider.gameObject.CompareTag("Player"))
-                _playerInForwardLook = true;
-
-
-        if(_enemyType == _enemyTypes.Infantry && gameObject.GetComponent<Rigidbody>().velocity != Vector3.zero)
+        if(_isAlive)
         {
-            _animator.SetBool("InfantryGo", true);
-        }  
-        //else
-        //{
-        //    _animator.SetBool("InfantryGo", false);
-        //}
-            
+            RaycastHit _raycast;
+            bool rayCast = Physics.Raycast(transform.position, _player.transform.position - transform.position, out _raycast, _sightRange, _mask);
 
-        //Debug.DrawRay(transform.position, _player.transform.position - transform.position, Color.green);
+            if (rayCast)
+                if (_raycast.collider.gameObject.CompareTag("Player"))
+                    _playerInForwardLook = true;
+
+
+            if (_enemyType == _enemyTypes.Infantry && gameObject.GetComponent<Rigidbody>().velocity != Vector3.zero)
+            {
+                _animator.SetBool("InfantryGo", true);
+            }
+            //else
+            //{
+            //    _animator.SetBool("InfantryGo", false);
+            //}
+
+
+            //Debug.DrawRay(transform.position, _player.transform.position - transform.position, Color.green);
+        }
+
+
     }
     private void GoBack()
     {
@@ -178,11 +186,18 @@ public class Enemy : MonoBehaviour
             bullet.GetComponent<Rigidbody>().velocity = transform.forward * 150f;
             _lastTime = 0f;
             Destroy(bullet, 1f);
+            if (_enemyType != _enemyTypes.Tank)
+            {
+                gameObject.GetComponent<AudioSource>().Play();
+            }
         }
-        if(_enemyType == _enemyTypes.Infantry)
+
+
+        if (_enemyType == _enemyTypes.Infantry)
         {
             _animator.SetBool("InfantryFire", false);
         }
+
 
     }
     private void Death()
@@ -191,6 +206,7 @@ public class Enemy : MonoBehaviour
         {
             _animator.SetBool("InfantryDie", true);
         }
+        _isAlive = false;
         Destroy(gameObject, 2f);
     }
 }

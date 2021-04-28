@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class GameController : MonoBehaviour
 {
@@ -24,13 +25,20 @@ public class GameController : MonoBehaviour
     private GameObject[] _liveAirDef;
     private static int _airDefNum;
 
-    [SerializeField] private Text _winLooseText;
+    private GameObject _gate;
+    [SerializeField] GameObject _boomPrefab;
+    [SerializeField] AudioClip _boomSound;
 
+
+    [SerializeField] private Text _winLooseText;
     [SerializeField] private Canvas _menu;
+    [SerializeField] private Canvas _options;
+
+    [SerializeField] private Slider _suroundVolumeSlider;
+    [SerializeField] private AudioMixer _mixer;
 
     public static bool _menuOpened;
     public static bool _youLoose;
-
     void Awake()
     {
         _enemyInfantrySpawnPoints = GameObject.FindGameObjectsWithTag("InfantrySpawnPoint");
@@ -40,8 +48,8 @@ public class GameController : MonoBehaviour
         _repairSpawnPoints = GameObject.FindGameObjectsWithTag("RepairSpawnPoint");
         _liveAirDef = GameObject.FindGameObjectsWithTag("airdef");
         _youLoose = false;
+        _gate = GameObject.Find("Gate3");
     }
-
     void Start()
     {
         Spawn(_enemyInfantryPrefab, _enemyInfantrySpawnPoints);
@@ -55,8 +63,10 @@ public class GameController : MonoBehaviour
         _winLooseText.enabled = false;
         _menu.enabled = false;
         _menuOpened = false;
+        _suroundVolumeSlider.value = GameObject.Find("SuroundSounds").GetComponent<AudioSource>().volume;
+        _mixer.SetFloat("Master", Mathf.Log10(0.5f) * 20);
+        
     }
-
     void Spawn(GameObject prefab, GameObject[] spawnPoints)
     {
         for (int i = 0; i < spawnPoints.Length; i++)
@@ -65,7 +75,6 @@ public class GameController : MonoBehaviour
             go = Instantiate(prefab, spawnPoints[i].transform.position, Quaternion.identity,spawnPoints[i].transform);
         }
     }
-
     private void Update()
     {
         if(_airDefNum == 0)
@@ -91,6 +100,25 @@ public class GameController : MonoBehaviour
         OpenMenu(false);
         Cursor.lockState = CursorLockMode.None;
     }
+
+    public void Options()
+    {
+        _menu.enabled = false;
+        _options.enabled = true;
+    }
+    public void Back()
+    {
+        _menu.enabled = true;
+        _options.enabled = false;
+    }
+    public void SuroundVolume()
+    {
+        GameObject.Find("SuroundSounds").GetComponent<AudioSource>().volume = _suroundVolumeSlider.value;
+    }
+    public void SoundVolume(float SliderValue)
+    {
+        _mixer.SetFloat("Master", Mathf.Log10(SliderValue) * 20);
+    }
     public void OpenMenu(bool value)
     {
         _menu.enabled = value;
@@ -106,8 +134,6 @@ public class GameController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1f;
         }
-            
-
     }
 
     public static void AirDefKilled()
@@ -124,6 +150,16 @@ public class GameController : MonoBehaviour
     void Win()
     {
         _winLooseText.enabled = true;
-        GameObject.Find("Gate3").transform.Translate(0f,-30f,0f);
+        for (int i = 0; i < 40; i++)
+        {
+            float _boomRadius = 30f;
+            float randX = Random.Range(-_boomRadius, _boomRadius);
+            float randY = Random.Range(-_boomRadius, _boomRadius);
+            float randZ = Random.Range(-_boomRadius, _boomRadius);
+            Vector3 pos = new Vector3(randX, randY, randZ);
+            Instantiate(_boomPrefab, _gate.transform.position + pos, _gate.transform.rotation);
+            AudioSource.PlayClipAtPoint(_boomSound, _gate.transform.position + pos);
+        }
+        _gate.transform.Translate(0f,-30f,0f);
     }
 }

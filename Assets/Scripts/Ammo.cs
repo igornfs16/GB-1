@@ -13,7 +13,8 @@ public class Ammo : MonoBehaviour
         {
             PlayerController player = other.GetComponentInChildren<PlayerController>();
             player.AmmoAdd(_ammoAdd);
-            Destroy(gameObject);
+            gameObject.GetComponent<AudioSource>().Play();
+            Destroy(gameObject,0.5f);
         }
     }
 }

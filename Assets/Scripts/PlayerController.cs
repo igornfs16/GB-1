@@ -5,10 +5,13 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header ("weapon fields")]
+
     [Header ("player fields")]
-    [Header ("other fileds")]
     [SerializeField] private float _maxPlayerHealth = 1000;
+    [SerializeField] private float _speed = 1;
+    [SerializeField] private float headMinY = -80f;
+    [SerializeField] private float headMaxY = 80f;
+    [Header("weapon fields")]
     [SerializeField] private int _gunAmmo = 500;
     [SerializeField] private float _gunDamage = 34;
     [SerializeField] private GameObject _bulletPrefab;
@@ -16,22 +19,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _mortarFireRate = 0.5f;
     [SerializeField] private int _mortarAmmo = 100;
     [SerializeField] private GameObject _minePrefab;
-    [SerializeField] private float headMinY = -80f;
-    [SerializeField] private float headMaxY = 80f;
-    //[SerializeField] private float _sensitivity = 10f;
-    [SerializeField] private float _speed = 1;
-    [SerializeField] private float _bulletSpeed = 200f;
+    //[SerializeField] private float _bulletSpeed = 200f;
     [SerializeField] private float _mineSpeed = 0.3f;
     [SerializeField] private float _maxMortarForce = 50f;
-    [SerializeField] private bool _haveMortar = false;
-    [SerializeField] private Camera _camera;
+    [SerializeField] private ParticleSystem _fireSmokePrefab;
+    [SerializeField] private LineRenderer _fireLine;
+    [Header("UI fields")]
     [SerializeField] private Slider _UIFireForce;
     [SerializeField] private Text _UIPlayerHealth;
     [SerializeField] private Text _UIPlayerAmmo;
     [SerializeField] private Text _UIPlayerMinesAmmo;
     [SerializeField] private LayerMask _mask;
     [SerializeField] private Material _fireMaterial;
+    [Header("Audio fields")]
+    [SerializeField] private AudioSource _robotGo;
+    [SerializeField] private AudioSource _robotFire;
+    [Header("Other fields")]
+    [SerializeField] private bool _haveMortar = false;
+    [SerializeField] private Camera _camera;
     
+
     private GameController gc;
     private float _rotationX;
     private float _rotationY;
@@ -43,6 +50,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _currentPos;
     private float _lastTime;
     private Animator _animator;
+    
 
 
     void Awake()
@@ -83,6 +91,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && !GameController._menuOpened)
         {
             _animator.SetBool("PlayerFire", false);
+            _robotFire.Stop();
         }
 
         if (Input.GetMouseButton(1) && _lastTime > _mortarFireRate && _mortarAmmo > 0 && _haveMortar && !GameController._menuOpened)
@@ -106,7 +115,13 @@ public class PlayerController : MonoBehaviour
             _currentPos.z = -Input.GetAxis("Vertical");
         }
         
-        var move = _currentPos * _speed * Time.fixedDeltaTime;
+        Vector3 move = _currentPos * _speed * Time.fixedDeltaTime;
+
+        if (move != Vector3.zero)
+            _robotGo.Play();
+        else
+            _robotGo.Stop();
+
         transform.Translate(move);
 
         //Debug.DrawLine(transform.position + new Vector3(0, 1, 1), Vector3.forward * Mathf.Infinity, Color.black);
@@ -121,10 +136,13 @@ public class PlayerController : MonoBehaviour
         //_lastTime = 0f;
         //Destroy(bullet, 3f);
         _animator.SetBool("PlayerFire",true);
+        _robotFire.Play();
+        ParticleSystem _smoke = Instantiate(_fireSmokePrefab, _gunFirePossition);
+        LineRenderer _line = Instantiate(_fireLine, _gunFirePossition);
         RaycastHit _raycast;
         bool rayCast = Physics.Raycast(_gunFirePossition.position, _camera.transform.forward, out _raycast, Mathf.Infinity, _mask);
 
-        DrawLine(_gunFirePossition.position, _camera.transform.forward);
+        //DrawLine(_gunFirePossition.position, _camera.transform.forward);
 
         if (rayCast)
         {
@@ -139,8 +157,11 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("OuchTower");
             }
         }
+        Destroy(_smoke, 2.0f);
+        Destroy(_line, 0.1f);
         _gunAmmo--;
         _lastTime = 0f;
+
     }
     void DrawLine(Vector3 start, Vector3 end, float duration = 0.1f)
     {
@@ -162,12 +183,12 @@ public class PlayerController : MonoBehaviour
     void MortarFireStart()
     {
         _UIFireForce.gameObject.SetActive(true);
-        Debug.Log("MortarFireForceDOWN");
+        //Debug.Log("MortarFireForceDOWN");
         if (_mortarFireForce < _maxMortarForce)
         {
             _mortarFireForce += Time.deltaTime * 30;
             _UIFireForce.value = _mortarFireForce;
-            Debug.Log("Mortar Power: " + _mortarFireForce.ToString());
+            //Debug.Log("Mortar Power: " + _mortarFireForce.ToString());
         }
         else
             _mortarFireForce = _maxMortarForce;
@@ -176,7 +197,7 @@ public class PlayerController : MonoBehaviour
     void MortarFire()
     {
         GameObject mine = Instantiate(_minePrefab, _mortarFirePossition.position, _mortarFirePossition.rotation);
-        Debug.Log("MortarFireForceUP");
+        //Debug.Log("MortarFireForceUP");
         mine.GetComponent<Rigidbody>().velocity = (_camera.transform.forward + Vector3.up * (Vector3.Magnitude(_camera.transform.forward))) * _mortarFireForce*_mineSpeed;
         //mine.GetComponent<Mine>().Init(_mortarFirePossition,_mortarFireForce);
         

@@ -19,7 +19,7 @@ public class Ambush : MonoBehaviour
     {
         if(other.tag == "Player" && _active)
         {
-            Debug.Log(_spawnPointBase.transform.position);
+            //Debug.Log(_spawnPointBase.transform.position);
             for (int i = 0; i < _enemyNumber; i++)
             {
                 float randX = Random.Range(-_respawnRadius, _respawnRadius);
